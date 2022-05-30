@@ -1,0 +1,52 @@
+#!/bin/bash
+
+cd /opt/wallpaper_changer/;
+
+echo " /\$\$      /\$\$           /\$\$ /\$\$        /\$\$\$\$\$\$  /\$\$                                                        
+| \$\$  /\$ | \$\$          | \$\$| \$\$       /\$\$__  \$\$| \$\$                                                        
+| \$\$ /\$\$\$| \$\$  /\$\$\$\$\$\$ | \$\$| \$\$      | \$\$  \__/| \$\$\$\$\$\$\$   /\$\$\$\$\$\$  /\$\$\$\$\$\$\$   /\$\$\$\$\$\$   /\$\$\$\$\$\$   /\$\$\$\$\$\$ 
+| \$\$/\$\$ \$\$ \$\$ |____  \$\$| \$\$| \$\$      | \$\$      | \$\$__  \$\$ |____  \$\$| \$\$__  \$\$ /\$\$__  \$\$ /\$\$__  \$\$ /\$\$__  \$\$
+| \$\$\$\$_  \$\$\$\$  /\$\$\$\$\$\$\$| \$\$| \$\$      | \$\$      | \$\$  \ \$\$  /\$\$\$\$\$\$\$| \$\$  \ \$\$| \$\$  \ \$\$| \$\$\$\$\$\$\$\$| \$\$  \__/
+| \$\$\$/ \  \$\$\$ /\$\$__  \$\$| \$\$| \$\$      | \$\$    \$\$| \$\$  | \$\$ /\$\$__  \$\$| \$\$  | \$\$| \$\$  | \$\$| \$\$_____/| \$\$      
+| \$\$/   \  \$\$|  \$\$\$\$\$\$\$| \$\$| \$\$      |  \$\$\$\$\$\$/| \$\$  | \$\$|  \$\$\$\$\$\$\$| \$\$  | \$\$|  \$\$\$\$\$\$\$|  \$\$\$\$\$\$\$| \$\$      
+|__/     \__/ \_______/|__/|__/       \______/ |__/  |__/ \_______/|__/  |__/ \____  \$\$ \_______/|__/      
+                                                                              /\$\$  \ \$\$                    
+                                                                             |  \$\$\$\$\$\$/                    
+                                                                              \______/                     "
+
+count=0
+names=()
+while IFS= read -r line
+do
+    if [[ $(whoami) != $line ]]
+    then
+        ((count = count + 1))
+        echo "$count) $line"
+        names+=("$line")
+    fi
+done < ./users
+read -p "Choose User:" user_number
+read -p "Choose Wallpaper:" wallpaper_path
+
+if [[ -d ${names[(($user_number - 1))]} ]];then
+    echo "Directory of user ${names[(($user_number - 1))]} found"
+else
+    echo "Directory of user ${names[(($user_number - 1))]} not find, creating it."
+    mkdir ${names[(($user_number - 1))]}
+fi
+
+if [[ -f $wallpaper_path ]]; then
+    format=$(file -b --mime-type $wallpaper_path | sed 's/.*\///')
+    if [[ $format == "png" ]]; then
+        echo "Format is correct sending wallpaper to ${names[(($user_number - 1))]}"
+    else
+        echo "Format is not correct ($format), converting to png."
+        convert $wallpaper_path ${names[(($user_number - 1))]}/wallpaper.png
+        echo "Convert done, sending to ${names[(($user_number - 1))]}"
+    fi
+fi
+
+git add ${names[(($user_number - 1))]}/wallpaper.png
+git commit -m "[$(date +%d-%m-%Y)] Adding wallpaper for ${names[(($user_number - 1))]} from $(whoami)"
+git push
+echo "Done"
