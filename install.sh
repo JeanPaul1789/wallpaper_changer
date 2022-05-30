@@ -7,7 +7,7 @@ if [ -z "$user" ]
 fi
 echo "User $user finded, starting installation";
 cd /opt/;
-sudo git clone https://github.com/Waz0x/wallpaper_changer;
+sudo git clone git@github.com:Waz0x/wallpaper_changer.git;
 sudo chown $(whoami) -R wallpaper_changer;
 cd wallpaper_changer;
 chmod +x wall_changer.sh;
