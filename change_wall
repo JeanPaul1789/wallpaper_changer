@@ -22,6 +22,8 @@ if [[ $1 == "update" ]];then
     cd /tmp/updating;
     ./install.sh;
     cd .. && rm -rf updating;
+    echo "done"
+    exit
 fi 
 
 count=0
