@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd /opt/wallpaper_changer/;
+git pull;
 
 echo " /\$\$      /\$\$           /\$\$ /\$\$        /\$\$\$\$\$\$  /\$\$                                                        
 | \$\$  /\$ | \$\$          | \$\$| \$\$       /\$\$__  \$\$| \$\$                                                        
@@ -14,6 +15,15 @@ echo " /\$\$      /\$\$           /\$\$ /\$\$        /\$\$\$\$\$\$  /\$\$
                                                                              |  \$\$\$\$\$\$/                    
                                                                               \______/                     "
 
+if [[ $1 == "update" ]];then
+    echo "updating wall_changer"
+    git clone git@github.com:Waz0x/wallpaper_changer.git /tmp/updating;
+    sudo rm -rf /opt/wall_changer;
+    cd /tmp/updating;
+    ./install.sh;
+    cd .. && rm -rf updating;
+fi 
+
 count=0
 names=()
 while IFS= read -r line
@@ -26,7 +36,7 @@ do
     fi
 done < ./users
 read -p "Choose User:" user_number
-read -p "Choose Wallpaper:" wallpaper_path
+read -p "Choose Wallpaper (full path):" wallpaper_path
 
 if [[ -d ${names[(($user_number - 1))]} ]];then
     echo "Directory of user ${names[(($user_number - 1))]} found"
