@@ -21,7 +21,7 @@ if [[ $1 == "update" ]];then
     sudo rm -rf /opt/wall_changer;
     cd /tmp/updating;
     ./install.sh;
-    cd .. && rm -rf updating;
+    cd .. && rm -rf updating && rm -rf wall_changer;
     echo "done"
     exit
 fi 
