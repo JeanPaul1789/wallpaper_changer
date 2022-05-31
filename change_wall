@@ -16,13 +16,18 @@ echo " /\$\$      /\$\$           /\$\$ /\$\$        /\$\$\$\$\$\$  /\$\$
                                                                               \______/                     "
 
 if [[ $1 == "update" ]];then
+    path=$(pwd)
     echo "updating wall_changer"
-    git clone git@github.com:Waz0x/wallpaper_changer.git /tmp/updating;
+    rm -rf /tmp/updating;
+    rm -rf /tmp/wall_changer;
     sudo rm -rf /opt/wall_changer;
+    git clone git@github.com:Waz0x/wallpaper_changer.git /tmp/updating;
     cd /tmp/updating;
     ./install.sh;
-    cd .. && rm -rf updating && rm -rf wall_changer;
+    rm -rf /tmp/updating;
+    rm -rf /tmp/wall_changer;
     echo "done"
+    cd $pwd
     exit
 fi 
 

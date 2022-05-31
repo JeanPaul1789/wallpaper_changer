@@ -6,6 +6,7 @@ if [ -z "$user" ]
   exit
 fi
 echo "User $user finded, starting installation";
+rm -rf /opt/wall_changer;
 cd /opt/;
 git clone git@github.com:Waz0x/wallpaper_changer.git /tmp/wallpaper_changer;
 sudo mv /tmp/wallpaper_changer /opt
